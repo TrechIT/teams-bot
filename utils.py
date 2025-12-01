@@ -60,7 +60,7 @@ def export_article_to_txt(article: dict, output_dir: str = "kb_txt"):
         if resolution:
             f.write("\n\n")
             f.write("Resolution / Steps:\n")
-            f.write(resolution.strip())
+            f.write(resolution)
         else:
             f.write("[No resolution in API response]")
 
