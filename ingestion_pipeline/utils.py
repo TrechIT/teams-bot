@@ -1,7 +1,7 @@
 import os
 import re
 import json
-import halo_api
+import echo_bot.ingestion_pipeline.halo_api as halo_api
 
 
 def json_to_dict(json_str: str) -> dict:

@@ -3,7 +3,7 @@
 
 from botbuilder.core import ActivityHandler, TurnContext
 from botbuilder.schema import ChannelAccount
-import query
+import echo_bot.bot.query as query
 import re
 
 

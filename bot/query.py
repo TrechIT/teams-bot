@@ -6,7 +6,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 from dotenv import dotenv_values
 import asyncio
-import halo_api
+import echo_bot.ingestion_pipeline.halo_api as halo_api
 
 CHROMA_PATH = dotenv_values()["CHROMA_PATH"]
 OPENAI_API_KEY = dotenv_values()["OPENAI_API_KEY"]

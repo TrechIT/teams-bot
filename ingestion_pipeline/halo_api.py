@@ -3,7 +3,7 @@ from dotenv import dotenv_values
 from typing import Any, Dict
 import httpx
 import asyncio
-import utils
+import echo_bot.ingestion_pipeline.utils as utils
 
 # Load config from .env
 config = dotenv_values()
