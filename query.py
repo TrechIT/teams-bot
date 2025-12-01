@@ -12,11 +12,15 @@ CHROMA_PATH = dotenv_values()["CHROMA_PATH"]
 OPENAI_API_KEY = dotenv_values()["OPENAI_API_KEY"]
 
 
-async def query_db(question: str, ticket_id: int, db: Chroma):
+async def query_db(question: str, ticket_id, db: Chroma):
     # Search the DB.
-
-    ticket_info = await halo_api.get_ticket(ticket_id)
-    request = f"Primary Question: {question}. Ticket Subject: {ticket_info['summary']}."
+    if ticket_id is None:
+        request = f"Primary Question: {question}"
+    else:
+        ticket_info = await halo_api.get_ticket(ticket_id)
+        request = (
+            f"Primary Question: {question}. Ticket Subject: {ticket_info['summary']}."
+        )
     results = db.similarity_search_with_relevance_scores(request, k=3)
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
     sources = [doc.metadata.get("source", None) for doc, _score in results]
@@ -45,7 +49,7 @@ async def create_prompt(question: str, ticket_id: int, db: Chroma):
     return PROMPT
 
 
-async def get_response(prompt: str, ticket_id: int):
+async def get_response(prompt: str, ticket_id):
     embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
     db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
 
