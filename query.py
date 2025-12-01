@@ -24,28 +24,48 @@ async def query_db(question: str, ticket_id, db: Chroma):
     results = db.similarity_search_with_relevance_scores(request, k=3)
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
     sources = [doc.metadata.get("source", None) for doc, _score in results]
+    scores = [score for _doc, score in results]
     if len(results) == 0 or results[0][1] < 0.5:
         output = "No relevant articles found."
-        return output, sources
-    return context_text, sources
+        return output, sources, scores
+    return context_text, sources, scores
 
 
 async def create_prompt(question: str, ticket_id: int, db: Chroma):
-    results, sources = await query_db(question, ticket_id, db)
-
+    results, sources, scores = await query_db(question, ticket_id, db)
+    formatted_sources = "\n".join(
+        f"{i + 1}. {src} (score={score:.3f})"
+        for i, (src, score) in enumerate(zip(sources, scores))
+    )
     PROMPT = f"""
-    You are a support agent bot that helps users by answering questions based on a knowledge base of articles. 
-    Here is the context of the request:
+            You are a support agent bot that answers user questions *only* using the knowledge base context provided.
 
-    {results}
+            If the context does not contain enough information to confidently answer,
+            say that you don't know and suggest the user contact a human agent.
 
-    ---
+            ---------------- CONTEXT START ----------------
+            {results}
+            ----------------- CONTEXT END -----------------
 
-    Answer the question based on the above context: {question}
+            Question:
+            {question}
 
-    After your answer, provide the list of sources you used here, explicitly using this content: {sources}
+            Instructions:
+            - Base your answer only on the context above. Do not use outside knowledge.
+            - If relevant information is missing from the context, say you don't know.
+            - Be clear and concise, and write in a helpful, professional tone.
+            - At the end, list the sources you used and their scores.
 
-    """
+            After your answer, output:
+
+            Sources:
+            <Source 1> <Score 1>
+            <Source 2> <Score 2>
+            ...
+
+            Available sources and scores:
+            {formatted_sources}
+            """
     return PROMPT
 
 
