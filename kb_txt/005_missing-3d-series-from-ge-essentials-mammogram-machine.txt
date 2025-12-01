@@ -1,0 +1,11 @@
+Missing 3D series from GE essentials Mammogram machine
+======================================================
+
+ID: 5
+Problem / Description:
+Sometimes when using a GE Essentials Mammogram machine the 3D series is not reconstructed from the raw series and needs to be reconstructed and resent, the instructions here are to be performed by the mammo tech or an engineer on site.
+
+Resolution / Steps:
+The tech would do this and can always ask us for clarification/help:
+
+Identify the study in PACS and verify which 3D series are missingThe tech should find the study on the Mammo machine, in the study browser and select itOnce selected the tech will see the Series listed, find and verify the missing series only exists in a RAW format and there is no VOL series of the missing seriesSelect the RAW series and click on the reconstruct button and wait for the reconstruction to be completedAfter the process is completed there will now be a VOL version of the series this should be highlighted and sent to PACSConfirm the images are in PACSIf they are GREAT, WE FIXED IT!!!If they are not further troubleshooting is needed

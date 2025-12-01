@@ -1,0 +1,13 @@
+Create Addendum in Synthesis
+============================
+
+ID: 6
+Problem / Description:
+Instructions for creating an addendum in Synthesis PACS
+
+Resolution / Steps:
+Once we receive and identify we are being requested to put an addendum request in Synthesis we first should confirm the request is correct and what they are asking makes sense.  (example: They are asking for the report to say its an MRI of the brain but the report is clearly for a Mammogram.
+
+Details needed to complete the ticket:
+Enough information to find the exact patient and examWhy the addendum is being requestedOnce it is confirmed follow these steps:
+Log into SynthesisNavigate to Exams > CompletedFilter the list to find the exam you are looking forOpen the Exam and check to make sure the addendum is neededClick the 3 dots in the bottom right > Select Addendum: RequestFill out the reason for addendum with the correct informationSubmit the requestNotify the Radiologist there is an exam that requires an addendum.If you cannot contact the radiologist yourself let someone from the teleradiology group know there is an addendum being requested and include the deatils (Who is requesting, why they are requesting, what they are requesting)

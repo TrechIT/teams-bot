@@ -1,0 +1,10 @@
+Peplink Port Forwarding Fule
+============================
+
+ID: 9
+Problem / Description:
+When a system needs to be available over the internet and the user is on a peplink firewall, you can use this article to make sure you are setting up the firewall port forwarding rule correcty.  Please see the internal memo section to understand port forwarding.
+
+Resolution / Steps:
+Before any changes are made, make sure the client understands the system will be exposed to the interenet.  Ensure the system is running the latest firmware and has the proper security settings configured.
+Log into In ControlFind the device and gain remote accessOnce you have remote access go to Advanced > Port ForwardingClick Add ServiceCreate a Name that describes the service we are allowingUsually we will select a Single port to forward, or a port mapping which allows port on the firewall to map to a different port on the destination deviceSelect a WAN connection that the port will be listening on, you can pick multiple if neededEnter the IP of the desired end point deviceExample of a mapping for a DVR where port 101 on the firewall will map to port 80 on the DVR.click saveTest that the rule is working with the end user.

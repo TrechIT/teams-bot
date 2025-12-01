@@ -1,0 +1,11 @@
+Link to Generic Windows Keys
+============================
+
+ID: 7
+Problem / Description:
+Use this link to access Generic Windows Keys for assistance with issues licensing devices
+
+These are NOT product / license keys that are valid for Windows activation.
+These keys only select the edition of Windows to install during setup, but they do not activate or license the installation.
+
+https://gist.github.com/rvrsh3ll/0810c6ed60e44cf7932e4fbae25880df[No resolution in API response]

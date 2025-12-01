@@ -1,0 +1,9 @@
+Synthesis: Move Study To Pending
+================================
+
+ID: 4
+Problem / Description:
+If a user on synthesis requests a study to be sent to pending because it is currently in synthesis' completed status without a report follow this guide
+
+Resolution / Steps:
+Log into SynthesisNavigate to Exams > Complete Identify the correct study with the requesting user take note of the EXAM IDopen a ticket with Synthesis (email support@synthesis.health)They should resolve the ticket in about 30-60 minutesOnce you get confirmation from Synthesis let the end user know it has been resolvedClose the ticket

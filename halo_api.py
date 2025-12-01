@@ -3,6 +3,7 @@ from dotenv import dotenv_values
 from typing import Any, Dict
 import httpx
 import asyncio
+import utils
 
 # Load config from .env
 config = dotenv_values()
@@ -101,14 +102,9 @@ async def get_ticket(ticket_id: int):
         raise
 
 
-def get_knowledge_base_article(article_id: int):
+def get_knowledge_base_article(article_id: int, token):
     # TODO: Implement this function to fetch knowledge base articles
-    pass
-
-
-def get_knowledge_base_contents():
-    token = get_kb_token()
-    url = f"https://halo.trechit.com/api/KBArticle?paginate=True&page_no=1&page_size=50"
+    url = f"https://halo.trechit.com/api/KBArticle/{article_id}"
     try:
         with httpx.Client() as client:
             resp = client.get(
@@ -126,15 +122,43 @@ def get_knowledge_base_contents():
         raise
 
 
+def get_knowledge_base_contents(token):
+    url = f"https://halo.trechit.com/api/KBArticle"
+    try:
+        with httpx.Client() as client:
+            resp = client.get(
+                url,
+                headers={"Authorization": f"Bearer {token}"},
+            )
+            resp.raise_for_status()
+            response = resp.json()
+            return [a["id"] for a in response["articles"]]
+    except httpx.HTTPStatusError as e:
+        print("\n=== HTTP ERROR (KB) ===")
+        print(f"URL: {e.request.url}")
+        print(f"Status: {e.response.status_code}")
+        print(f"Body: {e.response.text}")
+        print("===========================\n")
+        raise
+
+
 async def main():
     # test_ticket_id = 2267
-    try:
-        # ticket = await get_ticket(test_ticket_id)
-        # print(ticket)
-        kb_contents = await get_knowledge_base_contents()
-        print(kb_contents)
-    except Exception as e:
-        print(f"Error in main(): {e}")
+    # try:
+    # ticket = await get_ticket(test_ticket_id)
+    # print(ticket)
+    token = get_kb_token()
+    kb_contents = get_knowledge_base_contents(token)
+    for article_id in kb_contents:
+        response = get_knowledge_base_article(article_id, token)
+        try:
+            utils.export_article_to_txt(response)
+        except Exception as e:
+            print(f"Error exporting article: {e}")
+
+
+# except Exception as e:
+# print(f"Error in main(): {e}")
 
 
 if __name__ == "__main__":

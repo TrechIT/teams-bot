@@ -3,8 +3,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from dotenv import dotenv_values
-import utils
-import halo_api
+
 
 config = dotenv_values()
 CHROMA_PATH = config["CHROMA_PATH"]
@@ -42,6 +41,4 @@ def create_vector_store():
 
 
 if __name__ == "__main__":
-    load_documents()
-    split_documents(load_documents())
     create_vector_store()
