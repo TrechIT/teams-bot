@@ -25,7 +25,7 @@ async def query_db(question: str, ticket_id, db: Chroma):
     context_text = "\n\n---\n\n".join([doc.page_content for doc, _score in results])
     sources = [doc.metadata.get("source", None) for doc, _score in results]
     scores = [score for _doc, score in results]
-    if len(results) == 0 or results[0][1] < 0.5:
+    if len(results) == 0 or results[0][1] < 0.7:
         output = "No relevant articles found."
         return output, sources, scores
     return context_text, sources, scores
