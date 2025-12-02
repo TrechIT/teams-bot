@@ -15,21 +15,25 @@ secrets:
     file: ./secrets/openai_api_key.txt
   
 services:
-  # bot:
-  #   build:
-  #     context: ./bot
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "8080:8080"
-  #   environment:
-  #     CHROMA_HOST: "chromadb"
-  #     CHROMA_PORT: "8000"
-  #   depends_on:
-  #     - chromadb
-  #   #networks:
-  #     #- bot-network
-  #   secrets:
-  #     - openai_api_key
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    ports:
+      - "3978:3978"
+    # environment:
+    #   CHROMA_HOST: "chromadb"
+    #   CHROMA_PORT: "8000"
+    # depends_on:
+    #   - chromadb
+    #networks:
+      #- bot-network
+    secrets:
+      - openai_api_key
+      - halo_base_url
+      - halo_client_id
+      - halo_client_secret
+      - chroma_path
 
 
   # chromadb:

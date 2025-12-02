@@ -4,12 +4,31 @@ import argparse
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
-from dotenv import dotenv_values
 import asyncio
 import halo_api as halo_api
+import sys
+import os
 
-CHROMA_PATH = dotenv_values()["CHROMA_PATH"]
-OPENAI_API_KEY = dotenv_values()["OPENAI_API_KEY"]
+SECRETS_PATH = "/run/secrets"
+
+
+def get_config_value(key: str) -> str:
+    """
+    Attempts to read a secret from a mounted file
+    """
+    secret_file_path = os.path.join(SECRETS_PATH, key.lower())
+    try:
+        with open(secret_file_path, "r") as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        print(
+            f"Error: Configuration key '{key}' not found in Docker Secrets.",
+            file=sys.stderr,
+        )
+
+
+CHROMA_PATH = get_config_value("CHROMA_PATH")
+OPENAI_API_KEY = get_config_value("OPENAI_API_KEY")
 
 
 async def query_db(question: str, ticket_id, db: Chroma):

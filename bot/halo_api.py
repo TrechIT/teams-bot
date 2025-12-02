@@ -8,24 +8,22 @@ SECRETS_PATH = "/run/secrets"
 
 def get_config_value(key: str) -> str:
     """
-    Attempts to read a secret from a mounted file, falling back to a standard
-    environment variable for local development.
+    Attempts to read a secret from a mounted file
     """
     secret_file_path = os.path.join(SECRETS_PATH, key.lower())
     try:
         with open(secret_file_path, "r") as f:
-            # Secrets often have trailing newlines, so strip them
             return f.read().strip()
     except FileNotFoundError:
         print(
-            f"Error: Configuration key '{key}' not found in Docker Secrets or environment variables.",
+            f"Error: Configuration key '{key}' not found in Docker Secrets.",
             file=sys.stderr,
         )
 
 
-HALO_BASE_URL = get_config_value["HALO_BASE_URL"]
-HALO_CLIENT_ID = get_config_value["HALO_CLIENT_ID"]
-HALO_CLIENT_SECRET = get_config_value["HALO_CLIENT_SECRET"]
+HALO_BASE_URL = get_config_value("HALO_BASE_URL")
+HALO_CLIENT_ID = get_config_value("HALO_CLIENT_ID")
+HALO_CLIENT_SECRET = get_config_value("HALO_CLIENT_SECRET")
 
 
 async def get_ticket_token():
