@@ -1,9 +1,0 @@
-Update report in Abbadox
-========================
-
-ID: 3
-Problem / Description:
-If a user complains of a report having an issue in Abbadox and it has been fixed in synthesis you can follow these instructions.  But note most issues with reports cannot be updated so this should only be used in a few cases.
-
-Resolution / Steps:
-Identify that the report is updated in Synthesis with the correct fixes requestedLog into abbadoxGo to 'Waffle Menu" in the top left cornerSelect "Settings"search and select "Order Lookup"Search by patient id or order idSelect the line that needs to be reprocessedclick the blue "Reopen Order/remove Result"This removes the report from AbbadoxGo into synthesisFind the exam in the completed listclick the 3 dots and select "Report: Resend"Highlight ORU in the HL7 column and click the button to the right that appears next to ORU to resendCheck the report is correct with the user requestingClose the ticket

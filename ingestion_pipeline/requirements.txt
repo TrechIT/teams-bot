@@ -1,2 +1,6 @@
 asyncio
 httpx
+chromadb
+langchain_openai
+langchain_community
+langchain_core
