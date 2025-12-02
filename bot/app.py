@@ -15,8 +15,8 @@ from botbuilder.core import (
 from botbuilder.core.integration import aiohttp_error_middleware
 from botbuilder.schema import Activity, ActivityTypes
 
-from echo_bot.bot.bot import MyBot
-from echo_bot.bot.config import DefaultConfig
+from bot import MyBot
+from config import DefaultConfig
 
 CONFIG = DefaultConfig()
 
@@ -82,6 +82,6 @@ APP.router.add_post("/api/messages", messages)
 
 if __name__ == "__main__":
     try:
-        web.run_app(APP, host="localhost", port=CONFIG.PORT)
+        web.run_app(APP, host="0.0.0.0", port=CONFIG.PORT)
     except Exception as error:
         raise error

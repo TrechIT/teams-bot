@@ -1,2 +1,5 @@
 .env
 .pylintrc
+secrets/
+__pycache__/
+.DS_Store

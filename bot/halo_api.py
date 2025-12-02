@@ -1,5 +1,5 @@
 import httpx
-import utils as utils
+import asyncio
 import os
 import sys
 
@@ -23,24 +23,24 @@ def get_config_value(key: str) -> str:
         )
 
 
-HALO_BASE_URL = get_config_value("HALO_BASE_URL")
-HALO_CLIENT_ID = get_config_value("HALO_CLIENT_ID")
-HALO_CLIENT_SECRET = get_config_value("HALO_CLIENT_SECRET")
+HALO_BASE_URL = get_config_value["HALO_BASE_URL"]
+HALO_CLIENT_ID = get_config_value["HALO_CLIENT_ID"]
+HALO_CLIENT_SECRET = get_config_value["HALO_CLIENT_SECRET"]
 
 
-def get_kb_token():
+async def get_ticket_token():
     url = f"{HALO_BASE_URL}/auth/token"
 
     data = {
         "grant_type": "client_credentials",
         "client_id": HALO_CLIENT_ID,
         "client_secret": HALO_CLIENT_SECRET,
-        "scope": "read:kb",
+        "scope": "read:tickets",
     }
 
     try:
-        with httpx.Client() as client:
-            resp = client.post(
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
                 url,
                 data=data,
                 headers={
@@ -50,6 +50,7 @@ def get_kb_token():
             )
             resp.raise_for_status()
             # print(resp.json()["access_token"])
+            resp.raise_for_status()
             token_data = resp.json()
             return token_data["access_token"]
     except httpx.HTTPStatusError as e:
@@ -61,52 +62,23 @@ def get_kb_token():
         raise
 
 
-def get_knowledge_base_article(article_id: int, token):
-    # TODO: Implement this function to fetch knowledge base articles
-    url = f"{HALO_BASE_URL}/api/KBArticle/{article_id}"
+async def get_ticket(ticket_id: int):
+    token = await get_ticket_token()
+    # print(token)
+    url = f"{HALO_BASE_URL}/api/tickets/{ticket_id}"
+
     try:
-        with httpx.Client() as client:
-            resp = client.get(
+        async with httpx.AsyncClient() as client:
+            resp = await client.get(
                 url,
                 headers={"Authorization": f"Bearer {token}"},
             )
             resp.raise_for_status()
             return resp.json()
     except httpx.HTTPStatusError as e:
-        print("\n=== HTTP ERROR (KB) ===")
+        print("\n=== HTTP ERROR (TICKET) ===")
         print(f"URL: {e.request.url}")
         print(f"Status: {e.response.status_code}")
         print(f"Body: {e.response.text}")
         print("===========================\n")
         raise
-
-
-def get_knowledge_base_contents(token):
-    url = f"{HALO_BASE_URL}/api/KBArticle"
-    try:
-        with httpx.Client() as client:
-            resp = client.get(
-                url,
-                headers={"Authorization": f"Bearer {token}"},
-            )
-            resp.raise_for_status()
-            response = resp.json()
-            return [a["id"] for a in response["articles"]]
-    except httpx.HTTPStatusError as e:
-        print("\n=== HTTP ERROR (KB) ===")
-        print(f"URL: {e.request.url}")
-        print(f"Status: {e.response.status_code}")
-        print(f"Body: {e.response.text}")
-        print("===========================\n")
-        raise
-
-
-if __name__ == "__main__":
-    token = get_kb_token()
-    kb_contents = get_knowledge_base_contents(token)
-    for article_id in kb_contents:
-        response = get_knowledge_base_article(article_id, token)
-        try:
-            utils.export_article_to_txt(response)
-        except Exception as e:
-            print(f"Error exporting article: {e}")

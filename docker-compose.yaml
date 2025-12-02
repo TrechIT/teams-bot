@@ -1,0 +1,63 @@
+secrets:
+  prefect_key:
+    file: ./secrets/prefect_key.txt
+  halo_base_url:
+    file: ./secrets/halo_base_url.txt
+  halo_client_id:
+    file: ./secrets/halo_client_id.txt
+  halo_client_secret:
+    file: ./secrets/halo_client_secret.txt
+  chroma_path:
+    file: ./secrets/chroma_path.txt
+  data_path:
+    file: ./secrets/kb_txt.txt
+  openai_api_key:
+    file: ./secrets/openai_api_key.txt
+  
+services:
+  # bot:
+  #   build:
+  #     context: ./bot
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   environment:
+  #     CHROMA_HOST: "chromadb"
+  #     CHROMA_PORT: "8000"
+  #   depends_on:
+  #     - chromadb
+  #   #networks:
+  #     #- bot-network
+  #   secrets:
+  #     - openai_api_key
+
+
+  # chromadb:
+  #   image: chromadb/chromadb:latest
+  #   ports:
+  #     - "8000:8000"
+  #   #networks:
+  #     #- bot-network
+  #   volumes:
+  #     - chroma_data:/chromadb_deployment/chroma_store
+  #   secrets:
+  #     - chroma_path
+
+  ingestion:
+    build:
+      context: ./ingestion_pipeline
+      dockerfile: Dockerfile
+    # environment:
+    #   prefect_api_url: "http://prefect-server:4200"
+    #   chroma_host: chromadb
+    #   chroma_port: "8000"
+    # # depends_on:
+    #   - chromadb
+    #networks:
+      #- bot-network
+    secrets:
+      - prefect_key
+      - chroma_path
+      - halo_base_url
+      - halo_client_id
+      - halo_client_secret
