@@ -148,7 +148,7 @@ def run_ingestion():
     print(f"Connecting to remote ChromaDB at {CHROMA_HOST_IP}:{CHROMA_HOST_PORT}...")
     db = Chroma.from_documents(
         documents=split_docs,
-        embedding=embeddings,
+        embedding_function=embeddings,
         collection_name=CHROMA_COLLECTION_NAME,
         client=chromadb.HttpClient(host=CHROMA_HOST_IP, port=CHROMA_HOST_PORT),
     )

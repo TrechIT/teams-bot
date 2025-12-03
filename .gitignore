@@ -3,3 +3,5 @@ secrets/
 __pycache__
 .DS_Store
 .terraform/
+create_bot.sh
+bot.zip

@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appServiceName": {
+            "value": "teams-bot-host-2025"
+        },
+        "existingAppServicePlanName": {
+            "value": ""
+        },
+        "existingAppServicePlanLocation": {
+            "value": ""
+        },
+        "newAppServicePlanName": {
+            "value": "teams-bot-service"
+        },
+        "newAppServicePlanLocation": {
+            "value": "East US 2"
+        },
+        "newAppServicePlanSku": {
+            "value": {
+                "name": "B1",
+                "tier": "Basic",
+                "size": "B1",
+                "family": "B",
+                "capacity": 1
+            }
+        },
+        "appType": {
+            "value": "UserAssignedMSI"
+        },
+        "appId": {
+            "value": ""
+        },
+        "appSecret": {
+            "value": ""
+        },
+        "tenantId": {
+            "value": "fdb99c56-d68d-4785-bcbe-d29c8baf14d2"
+        },
+        "UMSIName": {
+            "value": "teams-bot"
+        },
+        "UMSIResourceGroupName": {
+            "value": "rg-bot-app"
+        }
+    }
+}

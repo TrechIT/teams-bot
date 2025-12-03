@@ -1,34 +1,12 @@
-import argparse
-
-# from dataclasses import dataclass
 from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 import asyncio
 import halo_api as halo_api
-import sys
-import os
+import chromadb
+from config import DefaultConfig
 
-SECRETS_PATH = "/run/secrets"
-
-
-def get_config_value(key: str) -> str:
-    """
-    Attempts to read a secret from a mounted file
-    """
-    secret_file_path = os.path.join(SECRETS_PATH, key.lower())
-    try:
-        with open(secret_file_path, "r") as f:
-            return f.read().strip()
-    except FileNotFoundError:
-        print(
-            f"Error: Configuration key '{key}' not found in Docker Secrets.",
-            file=sys.stderr,
-        )
-
-
-CHROMA_PATH = get_config_value("CHROMA_PATH")
-OPENAI_API_KEY = get_config_value("OPENAI_API_KEY")
+CONFIG = DefaultConfig()
 
 
 async def query_db(question: str, ticket_id, db: Chroma):
@@ -89,14 +67,20 @@ async def create_prompt(question: str, ticket_id: int, db: Chroma):
 
 
 async def get_response(prompt: str, ticket_id):
-    embedding_function = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
-    db = Chroma(persist_directory=CHROMA_PATH, embedding_function=embedding_function)
+    embeddings = OpenAIEmbeddings(openai_api_key=CONFIG.OPENAI_API_KEY)
+    db = Chroma(
+        embeddings=embeddings,
+        collection_name=CONFIG.CHROMA_COLLECTION_NAME,
+        client=chromadb.HttpClient(
+            host=CONFIG.CHROMA_HOST_IP, port=CONFIG.CHROMA_HOST_PORT
+        ),
+    )
 
     # prompt_template = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
     # prompt = prompt_template.format(context=context_text, question=query_text)
     # print(prompt)
     prompt = await create_prompt(prompt, ticket_id, db)
-    model = ChatOpenAI(openai_api_key=OPENAI_API_KEY)
+    model = ChatOpenAI(openai_api_key=CONFIG.OPENAI_API_KEY)
     response_text = model.invoke(prompt).content
 
     formatted_response = f"{response_text}\n"
